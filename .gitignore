@@ -1,0 +1,54 @@
+# Ignore hidden files and folders except git related files
+.*
+!.gitignore
+!.gitattributes
+!.gitmodules
+!.gitlab-ci.yml
+!.coveragerc
+!.editorconfig
+!.env.example
+
+# CircleCI
+!.circleci
+
+# Ignore generated files
+*.pyc
+*.mo
+*~
+
+# Ignore upload files
+files/
+
+# Ignore Node modules
+node_modules/
+
+# Ignore build files
+static/build/
+
+# Ignore vagrant files
+.vagrant/
+
+# Ignore node_modules
+.node_modules/
+
+# Coverage / CI related stuff
+/coverage.xml
+
+# Deployment / local environment only stuff
+/core/settings/__pycache__/.*
+/log/application.log
+core/__pycache__/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+
+# Vim temp files
+*.swp
+*.swo
+
+# Ignore sql folder
+sql/*
+!sql/.keep
+
+sitemap.xml

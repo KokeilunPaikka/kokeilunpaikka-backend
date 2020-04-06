@@ -1,0 +1,23 @@
+[run]
+omit =
+    */tests*
+    */migrations/*
+    */settings/*
+    *wsgi.py*
+    *admin.py*
+    *urls.py*
+    *settings.py*
+    *apps.py*
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if self.debug:
+    raise AssertionError
+    raise NotImplementedError
+    except Exception as e:
+    #
+    = models.
+    from

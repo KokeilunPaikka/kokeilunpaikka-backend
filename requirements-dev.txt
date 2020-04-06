@@ -1,0 +1,5 @@
+django-nose
+coverage
+flake8
+isort
+freezegun

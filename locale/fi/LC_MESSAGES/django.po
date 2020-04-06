@@ -1,0 +1,517 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-06 02:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: core/settings/base.py:140
+msgid "fin"
+msgstr ""
+
+#: core/settings/base.py:141
+msgid "sve"
+msgstr ""
+
+#: core/settings/base.py:142
+msgid "eng"
+msgstr ""
+
+#: core/urls.py:9
+msgid "kokeilunpaikka.fi administration"
+msgstr "kokeilunpaikka.fi hallinta"
+
+#: extensions/auth/models.py:33
+#: templates/email/registration_notification.html:2
+#: templates/email/registration_notification.txt:2
+msgid "Thank you for your registration"
+msgstr "Kiitos rekisteröitymisestä"
+
+#: kokeilunpaikka/experiments/apps.py:7
+msgid "Experiments"
+msgstr "Kokeilut"
+
+#: kokeilunpaikka/experiments/models.py:18
+msgid "ends at"
+msgstr "päättyy"
+
+#: kokeilunpaikka/experiments/models.py:22
+#: kokeilunpaikka/experiments/models.py:157 kokeilunpaikka/library/models.py:14
+#: kokeilunpaikka/uploads/models.py:16 kokeilunpaikka/uploads/models.py:26
+#: kokeilunpaikka/users/models.py:28
+msgid "image"
+msgstr "kuva"
+
+#: kokeilunpaikka/experiments/models.py:26 kokeilunpaikka/library/models.py:18
+msgid "is visible"
+msgstr "näkyvillä"
+
+#: kokeilunpaikka/experiments/models.py:31
+msgid "Emphasized opening content of the challenge."
+msgstr "Kokeiluhaun korostettu avausteksti."
+
+#: kokeilunpaikka/experiments/models.py:33 kokeilunpaikka/library/models.py:22
+msgid "lead text"
+msgstr "ingressiteksti"
+
+#: kokeilunpaikka/experiments/models.py:37
+msgid "starts at"
+msgstr "alkaa"
+
+#: kokeilunpaikka/experiments/models.py:42
+#: kokeilunpaikka/experiments/models.py:238 kokeilunpaikka/library/models.py:27
+#: kokeilunpaikka/themes/models.py:40
+msgid "themes"
+msgstr "teemat"
+
+#: kokeilunpaikka/experiments/models.py:47
+#: kokeilunpaikka/experiments/models.py:144 kokeilunpaikka/library/models.py:32
+#: kokeilunpaikka/stages/models.py:31 kokeilunpaikka/stages/models.py:93
+#: kokeilunpaikka/users/models.py:13
+msgid "description"
+msgstr "kuvaus"
+
+#: kokeilunpaikka/experiments/models.py:51
+#: kokeilunpaikka/experiments/models.py:183
+#: kokeilunpaikka/experiments/models.py:295 kokeilunpaikka/library/models.py:36
+#: kokeilunpaikka/stages/models.py:35 kokeilunpaikka/themes/models.py:34
+msgid "name"
+msgstr "nimi"
+
+#: kokeilunpaikka/experiments/models.py:55
+#: kokeilunpaikka/experiments/models.py:210 kokeilunpaikka/library/models.py:40
+msgid ""
+"Automatically generated user-friendly short text that is used in the URL "
+"shown in the address bar to identify and describe this resource."
+msgstr ""
+"Automaattisesti luotu käyttäjäystävällinen lyhytteksti, jota käytetään "
+"osoitepalkissa näkyvän URL-osoitteen osana yksilöimään tätä resurssia."
+
+#: kokeilunpaikka/experiments/models.py:61
+#: kokeilunpaikka/experiments/models.py:217 kokeilunpaikka/library/models.py:46
+msgid "slug"
+msgstr "slug"
+
+#: kokeilunpaikka/experiments/models.py:68
+#: kokeilunpaikka/experiments/models.py:98
+#: kokeilunpaikka/experiments/models.py:124 kokeilunpaikka/stages/models.py:66
+msgid "experiment challenge"
+msgstr "kokeiluhaku"
+
+#: kokeilunpaikka/experiments/models.py:69
+#: kokeilunpaikka/experiments/models.py:150
+msgid "experiment challenges"
+msgstr "kokeiluhaut"
+
+#: kokeilunpaikka/experiments/models.py:93
+#: kokeilunpaikka/experiments/models.py:244
+#: kokeilunpaikka/experiments/models.py:286
+#: kokeilunpaikka/experiments/models.py:364 kokeilunpaikka/stages/models.py:119
+msgid "experiment"
+msgstr "kokeilu"
+
+#: kokeilunpaikka/experiments/models.py:102
+msgid "is approved"
+msgstr "hyväksytty"
+
+#: kokeilunpaikka/experiments/models.py:110
+msgid "experiment challenge membership"
+msgstr "kokeiluhaun osallistuminen"
+
+#: kokeilunpaikka/experiments/models.py:111
+msgid "experiment challenge memberships"
+msgstr "kokeiluhaun osallistumiset"
+
+#: kokeilunpaikka/experiments/models.py:116
+msgid "date"
+msgstr "päiväys"
+
+#: kokeilunpaikka/experiments/models.py:119
+#: kokeilunpaikka/experiments/models.py:274
+#: kokeilunpaikka/experiments/models.py:319
+msgid "content"
+msgstr "sisältö"
+
+#: kokeilunpaikka/experiments/models.py:132
+msgid "experiment challenge timeline entry"
+msgstr "kokeiluhaun aikajanamerkintä"
+
+#: kokeilunpaikka/experiments/models.py:133
+msgid "experiment challenge timeline entries"
+msgstr "kokeiluhaun aikajanamerkinnät"
+
+#: kokeilunpaikka/experiments/models.py:141
+#: kokeilunpaikka/experiments/models.py:280
+#: kokeilunpaikka/experiments/models.py:325 kokeilunpaikka/themes/models.py:21
+msgid "created by"
+msgstr "tekijä"
+
+#: kokeilunpaikka/experiments/models.py:161
+msgid "is published"
+msgstr "julkaistu"
+
+#: kokeilunpaikka/experiments/models.py:170 kokeilunpaikka/users/models.py:39
+msgid "language"
+msgstr "kieli"
+
+#: kokeilunpaikka/experiments/models.py:175
+msgid ""
+"Options determining what kind of things are looked for the experiment in the "
+"service."
+msgstr ""
+"Valinnat kuvaamaan sitä minkälaisia asioita kokeiluun liittyen palvelussa "
+"etsitään."
+
+#: kokeilunpaikka/experiments/models.py:179 kokeilunpaikka/users/models.py:44
+msgid "looking for"
+msgstr "haetaan"
+
+#: kokeilunpaikka/experiments/models.py:188
+msgid "Name of the person or organization organizing the experiment."
+msgstr "Kokeilun järjestävän henkilön tai organisaation nimi."
+
+#: kokeilunpaikka/experiments/models.py:191
+msgid "organizer"
+msgstr "järjestäjä"
+
+#: kokeilunpaikka/experiments/models.py:196
+msgid "published at"
+msgstr "julkaisuaika"
+
+#: kokeilunpaikka/experiments/models.py:200
+msgid "Users who have full management permissions to this experiment."
+msgstr "Käyttäjät, joilla on täydet hallintaoikeudet tähän kokeiluun."
+
+#: kokeilunpaikka/experiments/models.py:204
+msgid "responsible users"
+msgstr "vastuulliset käyttäjät"
+
+#: kokeilunpaikka/experiments/models.py:222
+msgid "Current stage of the experiment."
+msgstr "Kokeilun tämänhetkinen vaihe."
+
+#: kokeilunpaikka/experiments/models.py:226 kokeilunpaikka/stages/models.py:40
+#: kokeilunpaikka/stages/models.py:84
+msgid "stage"
+msgstr "vaihe"
+
+#: kokeilunpaikka/experiments/models.py:232
+msgid "success rating"
+msgstr "onnistumisarvio"
+
+#: kokeilunpaikka/experiments/models.py:233
+msgid "Rating with a value from 1 to 10."
+msgstr "Onnistuminen mitattuna arvolla 1 ja 10 väliltä."
+
+#: kokeilunpaikka/experiments/models.py:245
+msgid "experiments"
+msgstr "kokeilut"
+
+#: kokeilunpaikka/experiments/models.py:291 kokeilunpaikka/uploads/models.py:27
+msgid "images"
+msgstr "kuvat"
+
+#: kokeilunpaikka/experiments/models.py:299
+#: kokeilunpaikka/experiments/models.py:331
+msgid "experiment post"
+msgstr "kokeilukuuluminen"
+
+#: kokeilunpaikka/experiments/models.py:300
+msgid "experiment posts"
+msgstr "kokeilukuulumiset"
+
+#: kokeilunpaikka/experiments/models.py:308
+msgid "count of comments"
+msgstr "kommenttien lukumäärä"
+
+#: kokeilunpaikka/experiments/models.py:335
+msgid "experiment post comment"
+msgstr "kokeilukuulumisen kommentti"
+
+#: kokeilunpaikka/experiments/models.py:336
+msgid "experiment post comments"
+msgstr "kokeilukuulumisten kommentit"
+
+#: kokeilunpaikka/experiments/models.py:340
+msgid "Comment for \"{}\" by {}"
+msgstr "Kommentti kuulumiselle \"{}\" käyttäjältä {}"
+
+#: kokeilunpaikka/experiments/models.py:358
+msgid "External link (URL)"
+msgstr "Ulkoinen linkki (URL)"
+
+#: kokeilunpaikka/experiments/models.py:368
+msgid "experiment external link"
+msgstr "kokeilun ulkoinen linkki"
+
+#: kokeilunpaikka/experiments/models.py:369
+msgid "experiment external links"
+msgstr "kokeilun ulkoiset linkit"
+
+#: kokeilunpaikka/experiments/models.py:382 kokeilunpaikka/stages/models.py:127
+#: kokeilunpaikka/users/models.py:101 kokeilunpaikka/users/models.py:124
+msgid "value"
+msgstr "arvo"
+
+#: kokeilunpaikka/experiments/models.py:387
+msgid "experiment looking for option"
+msgstr "kokeilulla etsittävä asia"
+
+#: kokeilunpaikka/experiments/models.py:388
+msgid "experiment looking for options"
+msgstr "kokeilulla etsittävät asiat"
+
+#: kokeilunpaikka/experiments/serializers.py:440
+msgid "There must always be at least one responsible user for an experiment."
+msgstr "Kokeilulla täytyy olla vähintään yksi vastuullinen henkilö."
+
+#: kokeilunpaikka/experiments/serializers.py:451
+msgid "Newly created experiment must be placed on the first stage."
+msgstr "Uudet kokeilut voidaan asettaa suoraan vain ensimmäiseen vaiheeseen"
+
+#: kokeilunpaikka/experiments/serializers.py:459
+msgid ""
+"The experiment is not approved to all selected experiment challenges and "
+"thus cannot be moved to the next stage."
+msgstr ""
+"Kokeilua ei ole hyväksytty kaikkiin valittuihin kokeiluhakuihin ja siksi "
+"sitä ei voida siirtää seuraavaan vaiheeseen."
+
+#: kokeilunpaikka/library/apps.py:7
+msgid "Library"
+msgstr "Kirjasto"
+
+#: kokeilunpaikka/library/models.py:53
+msgid "library item"
+msgstr "kirjastoartikkeli"
+
+#: kokeilunpaikka/library/models.py:54
+msgid "library items"
+msgstr "kirjastoartikkelit"
+
+#: kokeilunpaikka/stages/apps.py:7
+msgid "Stages"
+msgstr "Vaiheet"
+
+#: kokeilunpaikka/stages/models.py:16
+msgid ""
+"Determines the stage of an experiment numerically. Numbers should be in the "
+"ascending order, largest number indicating the last stage of an experiment. "
+"Numbering should start from one (1)."
+msgstr ""
+"Määrittää kokeilun vaiheen numeerisesti. Numerot tulee antaa nousevassa "
+"järjestyksessä siten, että suurin numero vastaa kokeilun viimeistä vaihetta. "
+"Numerointi tulisi alkaa luvusta yksi (1)."
+
+#: kokeilunpaikka/stages/models.py:26
+msgid "stage number"
+msgstr "vaihenumero"
+
+#: kokeilunpaikka/stages/models.py:41
+msgid "stages"
+msgstr "vaiheet"
+
+#: kokeilunpaikka/stages/models.py:59
+msgid ""
+"Question can be attached to a specific experiment challenge and thus is only "
+"asked if the experiment is attached for such challenge."
+msgstr ""
+"Kysymys voidaan asettaa koskemaan vain tiettyä kokeiluhakua, jolloin tämä "
+"esitetään vain jos kokeilu on liitetty kyseessä olevaan kokeiluhakuun."
+
+#: kokeilunpaikka/stages/models.py:71
+msgid ""
+"Determines whether the question and the related answer is shown in the "
+"detail page of an experiment. Non-public questions can be used for gathering "
+"private background information."
+msgstr ""
+"Määrittää esitetäänkö kysymys ja sen vastaus kokeilun omalla sivulla. Ei-"
+"julkisia kysymyksiä voidaan käyttää yksityisten taustatietojen keruuseen."
+
+#: kokeilunpaikka/stages/models.py:75
+msgid "is public"
+msgstr "julkinen"
+
+#: kokeilunpaikka/stages/models.py:79
+msgid ""
+"Question should be presented when trying to proceed to this specific stage."
+msgstr "Kysymys esitetään valittuun vaiheeseen siirryttäessä."
+
+#: kokeilunpaikka/stages/models.py:90 kokeilunpaikka/stages/models.py:102
+#: kokeilunpaikka/stages/models.py:124
+msgid "question"
+msgstr "kysymys"
+
+#: kokeilunpaikka/stages/models.py:95
+msgid ""
+"Detailed instructions for answering the question. Visible as a placeholder "
+"text in the form field."
+msgstr ""
+"Yksityiskohtaiset ohjeet kysymykseen vastaamiseen. Näytetään placeholder-"
+"tekstinä lomakekentässä."
+
+#: kokeilunpaikka/stages/models.py:103
+msgid "questions"
+msgstr "kysymykset"
+
+#: kokeilunpaikka/stages/models.py:114
+msgid "answered by"
+msgstr "vastaaja"
+
+#: kokeilunpaikka/stages/models.py:135
+msgid "question answer"
+msgstr "kysymysvastaus"
+
+#: kokeilunpaikka/stages/models.py:136
+msgid "question answers"
+msgstr "kysymysvastaukset"
+
+#: kokeilunpaikka/stages/models.py:140
+msgid "Answer for question \"{}\" for experiment {}"
+msgstr "Vastaus kysymykseen \"{}\" kokeilulle {}"
+
+#: kokeilunpaikka/stages/serializers.py:49
+msgid ""
+"The question is intended for an experiment challenge this experiment is not "
+"participating."
+msgstr ""
+"Kysymys on suunnattu vain kokeiluhaulle, johon tämä kokeilu ei ole hakenut."
+
+#: kokeilunpaikka/themes/apps.py:7
+msgid "Themes"
+msgstr "Teemat"
+
+#: kokeilunpaikka/themes/models.py:26
+msgid "User created themes are marked not curated by default."
+msgstr "Käyttäjän luomat teemat on oletuksena merkitty ei-kuratoiduiksi."
+
+#: kokeilunpaikka/themes/models.py:28
+msgid "is curated"
+msgstr "kuratoitu"
+
+#: kokeilunpaikka/themes/models.py:39
+msgid "theme"
+msgstr "teema"
+
+#: kokeilunpaikka/uploads/apps.py:7
+msgid "Uploads"
+msgstr "Lataukset"
+
+#: kokeilunpaikka/uploads/models.py:22
+msgid "uploaded by"
+msgstr "lataaja"
+
+#: kokeilunpaikka/users/apps.py:7
+msgid "Users"
+msgstr "Käyttäjät"
+
+#: kokeilunpaikka/users/models.py:17
+msgid "expose email address"
+msgstr "näytä sähköpostiosoite"
+
+#: kokeilunpaikka/users/models.py:19
+msgid ""
+"Controls whether the email address is returned by the API and displayed in "
+"the user profile."
+msgstr ""
+"Määrittää näytetäänkö käyttäjän sähköpostiosoitetta julkisesti "
+"käyttäjäprofiilissa."
+
+#: kokeilunpaikka/users/models.py:33
+msgid "interested in themes"
+msgstr "kiinnostunut teemoista"
+
+#: kokeilunpaikka/users/models.py:51 kokeilunpaikka/users/models.py:129
+msgid "user status option"
+msgstr "käyttäjän status-valinta"
+
+#: kokeilunpaikka/users/models.py:57
+msgid "user"
+msgstr "käyttäjä"
+
+#: kokeilunpaikka/users/models.py:63
+msgid "Facebook account URL"
+msgstr "Facebook-tilin osoite"
+
+#: kokeilunpaikka/users/models.py:67
+msgid "Instagram account URL"
+msgstr "Instagram-tilin osoite"
+
+#: kokeilunpaikka/users/models.py:71
+msgid "LinkedIn account URL"
+msgstr "LinkedIn-tilin osoite"
+
+#: kokeilunpaikka/users/models.py:75
+msgid "Twitter account URL"
+msgstr "Twitter-tilin osoite"
+
+#: kokeilunpaikka/users/models.py:79
+msgid "user profile"
+msgstr "käyttäjäprofiili"
+
+#: kokeilunpaikka/users/models.py:80
+msgid "user profiles"
+msgstr "käyttäjäprofiilit"
+
+#: kokeilunpaikka/users/models.py:84
+msgid "Profile for user \"{}\""
+msgstr "Profiili käyttäjälle \"{}\""
+
+#: kokeilunpaikka/users/models.py:97
+msgid ""
+"An option user can select for things he or she is looking for in the service."
+msgstr "Valinta, jolla käyttäjä voi osoittaa palvelusta etsimänsä asiat."
+
+#: kokeilunpaikka/users/models.py:106
+msgid "user looking for option"
+msgstr "käyttäjän etsimä asia"
+
+#: kokeilunpaikka/users/models.py:107
+msgid "user looking for options"
+msgstr "käyttäjän etsimät asiat"
+
+#: kokeilunpaikka/users/models.py:120
+msgid "An option user can select for his/her status. Like student etc."
+msgstr ""
+"Valinta, jolla käyttäjä voi osoittaa \"statuksensa\", esimerkiksi opiskelija."
+
+#: kokeilunpaikka/users/models.py:130
+msgid "user status options"
+msgstr "käyttäjän status-valinnat"
+
+#: kokeilunpaikka/users/serializers.py:373
+msgid "There is already an account with given email address."
+msgstr "Annetulla sähköpostiosoitteella löytyy jo tunnus järjestelmästä."
+
+#: kokeilunpaikka/utils/authentication.py:23
+msgid "Invalid token."
+msgstr "Virheellinen token-arvo."
+
+#: kokeilunpaikka/utils/authentication.py:29
+msgid "User inactive or deleted."
+msgstr "Käyttäjä on ei-aktiivinen tai poistettu."
+
+#: kokeilunpaikka/utils/authentication.py:37
+msgid "Token has expired."
+msgstr "Token on vanhentunut."
+
+#: kokeilunpaikka/utils/models.py:12
+msgid "created at"
+msgstr "luontiaika"
+
+#: kokeilunpaikka/utils/models.py:16
+msgid "updated at"
+msgstr "päivitysaika"
