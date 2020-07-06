@@ -92,6 +92,9 @@ class UserAPITestCase(APITestCase):
             'last_name': 'Doe',
             'linkedin_url': '',
             'looking_for': [],
+            'offering': [],
+            'send_experiment_notification': False,
+            'status': None,
             'twitter_url': '',
         }
         url = reverse('user-list')
@@ -184,6 +187,9 @@ class UserAPITestCase(APITestCase):
             'last_name': 'Doe',
             'linkedin_url': '',
             'looking_for': [],
+            'offering': [],
+            'send_experiment_notification': False,
+            'status': None,
             'twitter_url': '',
         }
         url = reverse('user-detail', kwargs={'pk': self.user.id})
@@ -224,8 +230,12 @@ class UserAPITestCase(APITestCase):
             'linkedin_url': '',
             'looking_for': [{
                 'id': looking_for.id,
-                'value': 'Help'
+                'value': 'Help',
+                'offering_value': ''
             }],
+            'offering': [],
+            'send_experiment_notification': False,
+            'status': None,
             'twitter_url': '',
         }
         url = reverse('user-detail', kwargs={'pk': self.user.id})
@@ -277,6 +287,7 @@ class UserAPITestCase(APITestCase):
             'published_at': '2019-07-10T12:00:00Z',
             'short_description': '',
             'slug': 'test',
+            'themes': [],
             'stage': {
                 'description': '',
                 'name': 'Stage',
@@ -355,6 +366,7 @@ class UserAPITestCase(APITestCase):
         expected_response_body = [{
             'id': looking_for_option.id,
             'value': 'Help',
+            'offering_value': ''
         }]
         url = reverse('user-looking-for-options')
         response = self.client.get(url)

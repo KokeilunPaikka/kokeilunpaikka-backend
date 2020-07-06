@@ -1,0 +1,15 @@
+Hei! {{ user }} on reagoinut kokeiluusi tai kommenttiisi.
+
+{{ experiment_url }}
+
+---------
+
+Hej! {{ user }} har reagerat på ditt försök eller din kommentar.
+
+{{ experiment_url }}
+
+----------
+
+Hey! {{ user }} has reacted to your experiment or a comment.
+
+{{ experiment_url }}

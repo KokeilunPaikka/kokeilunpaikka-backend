@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from parler.admin import TranslatableAdmin
+from parler.admin import TranslatableAdmin, TranslatableTabularInline
 
 from .models import (
     Experiment,
@@ -29,7 +29,7 @@ class ExperimentPostInlineAdmin(admin.StackedInline):
     )
 
 
-class ExperimentChallengeTimelineEntryInlineAdmin(admin.TabularInline):
+class ExperimentChallengeTimelineEntryInlineAdmin(TranslatableTabularInline):
     model = ExperimentChallengeTimelineEntry
     extra = 0
 

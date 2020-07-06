@@ -1,0 +1,24 @@
+Hei, {{ user }} on lisännyt sinut kokeiluun {{ experiment_name }}.
+Löydät kokeilun omasta profiilistasi ja voit muokata kokeilua ja siirtää sitä kokeilun eri vaiheissa.
+
+Mene profiiliisi
+
+{{ profile_url }}
+
+-----------
+
+Hi, {{ user }} have added you into the experiment {{ experiment_name }}.
+From now on you will find the experiment in your profile, where you can edit it furthermore.
+
+Go to your profile
+
+{{ profile_url }}
+
+-----------
+
+Hej, {{ user }} har lagt dig till i försöket {{ experiment_name }}.
+I fortsättningen hittar du försöket i din profil. Du kan nu redigera försöket och genomgå de olika stegen som ingår i ett försök.
+
+Gå till din profil
+
+{{ profile_url }}

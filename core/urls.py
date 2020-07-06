@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/', include('kokeilunpaikka.themes.urls')),
     path('api/', include('kokeilunpaikka.uploads.urls')),
     path('api/', include('kokeilunpaikka.users.urls')),
+    path('api/', include('kokeilunpaikka.sitemap.urls')),
     path('api/auth/', include('extensions.auth.rest_auth_urls')),
     path('docs/', include_docs_urls(
         title='Kokeilunpaikka API',

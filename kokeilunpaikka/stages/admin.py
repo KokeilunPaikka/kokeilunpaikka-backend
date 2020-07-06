@@ -12,9 +12,13 @@ class QuestionAdmin(TranslatableAdmin):
         'description',
         'stage',
         'experiment_challenge',
+        'ignore_in_experiment_challenge',
         'is_public',
         'created_at',
         'updated_at',
+    )
+    filter_horizontal = (
+        'ignore_in_experiment_challenge',
     )
     list_display = (
         'id',

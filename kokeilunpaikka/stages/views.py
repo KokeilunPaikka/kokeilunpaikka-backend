@@ -121,4 +121,13 @@ class QuestionViewSet(
     }
 
     def get_queryset(self):
+        if self.request.query_params.getlist('experiment_challenge[]'):
+            print(self.request.query_params.getlist('experiment_challenge[]'))
+            return Question.objects.filter(
+                stage_id=self.kwargs['stage_id']
+            ).exclude(
+                ignore_in_experiment_challenge__in=self.request.query_params.getlist(
+                    'experiment_challenge[]'
+                )
+            )
         return Question.objects.filter(stage_id=self.kwargs['stage_id'])

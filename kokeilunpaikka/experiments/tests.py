@@ -201,6 +201,7 @@ class ExperimentAPITestCase(APITestCase):
             'published_at': '2019-07-10T12:00:00Z',
             'short_description': 'Lorem ipsum',
             'slug': 'example-experiment',
+            'themes': [{'id': 15, 'is_curated': False, 'name': 'Theme'}],
             'stage': {
                 'description': '',
                 'name': 'First stage',
@@ -723,7 +724,7 @@ class ExperimentAPITestCase(APITestCase):
         response = self.client.put(url, request_body)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_experiment_update_for_stage_number_fails_with_unapproved_experiment_challeges(self):
+    def test_experiment_update_for_stage_number_success_with_unapproved_experiment_challeges(self):
         first_active_experiment_challenge = ExperimentChallenge.objects.create(
             description='Lorem ipsum',
             ends_at=timezone.now() + datetime.timedelta(hours=1),
@@ -768,12 +769,7 @@ class ExperimentAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.owner)
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en'}
         response = self.client.put(url, request_body, **headers)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.json()['stage_number'][0]['message'],
-            'The experiment is not approved to all selected experiment '
-            'challenges and thus cannot be moved to the next stage.'
-        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_experiment_update_fails_for_non_owner(self):
         url = reverse('experiment-detail', kwargs={'slug': self.experiment.slug})
@@ -939,7 +935,7 @@ class ExperimentAPITestCase(APITestCase):
         response = self.client.patch(url, request_body)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_experiment_partial_update_for_stage_number_fails_with_unapproved_experiment_challeges(self):  # noqa
+    def test_experiment_partial_update_for_stage_number_success_with_unapproved_experiment_challeges(self):  # noqa
         first_active_experiment_challenge = ExperimentChallenge.objects.create(
             description='Lorem ipsum',
             ends_at=timezone.now() + datetime.timedelta(hours=1),
@@ -982,12 +978,7 @@ class ExperimentAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.owner)
         headers = {'HTTP_ACCEPT_LANGUAGE': 'en'}
         response = self.client.patch(url, request_body, **headers)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.json()['stage_number'][0]['message'],
-            'The experiment is not approved to all selected experiment '
-            'challenges and thus cannot be moved to the next stage.'
-        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_experiment_destroy(self):
         url = reverse('experiment-detail', kwargs={'slug': self.experiment.slug})
@@ -1403,11 +1394,6 @@ class ExperimentPostAPITestCase(APITestCase):
     def test_experiment_post_create_fails_for_not_authenticated(self):
         response = self.client.post(self.list_url, {})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_experiment_post_create_fails_for_non_owner(self):
-        self.client.force_authenticate(user=self.non_owner)
-        response = self.client.post(self.list_url, {})
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_experiment_post_retrieve(self):
         expected_response_body = {

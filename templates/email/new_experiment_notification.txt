@@ -1,0 +1,30 @@
+Hei! {{ user }} on julkaissut kiinnostuksen kohteitasi vastaavan kokeilun.
+Tutustu kokeiluun ja osallistu keskusteluun Kokeilun paikassa
+
+{{ experiment_url }}
+
+Peru nämä ilmoitukset profiilissasi
+
+{{ profile_url }}
+
+----------
+
+Hi! {{ user }} have published an experiment that is matching your interests.
+Check out the experiment and participate in the discussion
+
+{{ experiment_url }}
+
+Cancel these notifications in your profile
+
+{{ profile_url }}
+
+----------
+
+Hej! {{ user }} har publicerats ett försök som motsvarar dina intressen.
+Ta en titt på försöket och delta i diskussionen.
+
+{{ experiment_url }}
+
+Avsluta prenumerationen av de här meddelandena i din profil
+
+{{ profile_url }}

@@ -96,6 +96,7 @@ class LibraryItemAPITestCase(APITestCase):
                 'published_at': '2019-07-10T12:00:00Z',
                 'short_description': 'Lorem ipsum',
                 'slug': 'example-experiment',
+                'themes': [{'id': 59, 'is_curated': False, 'name': None}],
                 'stage': {
                     'description': '',
                     'name': 'First stage',

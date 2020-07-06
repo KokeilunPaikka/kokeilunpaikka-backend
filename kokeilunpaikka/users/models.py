@@ -43,12 +43,22 @@ class UserProfile(TimeStampedModel):
         to='users.UserLookingForOption',
         verbose_name=_('looking for'),
     )
+    offering = models.ManyToManyField(
+        blank=True,
+        to='users.UserLookingForOption',
+        verbose_name=_('offering'),
+        related_name='offering_userprofile_set'
+    )
     status = models.ForeignKey(
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
         to='users.UserStatusOption',
         verbose_name=_('user status option')
+    )
+    send_experiment_notification = models.BooleanField(
+        verbose_name=_('send experiment notification'),
+        default=False
     )
     user = models.OneToOneField(
         on_delete=models.CASCADE,
@@ -58,19 +68,23 @@ class UserProfile(TimeStampedModel):
     )
 
     # Social media links
-    facebook_url = models.URLField(
+    facebook_url = models.CharField(
+        max_length=255,
         blank=True,
         verbose_name=_('Facebook account URL'),
     )
-    instagram_url = models.URLField(
+    instagram_url = models.CharField(
+        max_length=255,
         blank=True,
         verbose_name=_('Instagram account URL'),
     )
-    linkedin_url = models.URLField(
+    linkedin_url = models.CharField(
+        max_length=255,
         blank=True,
         verbose_name=_('LinkedIn account URL'),
     )
-    twitter_url = models.URLField(
+    twitter_url = models.CharField(
+        max_length=255,
         blank=True,
         verbose_name=_('Twitter account URL'),
     )
@@ -99,7 +113,16 @@ class UserLookingForOption(TimeStampedModel, TranslatableModel):
             ),
             max_length=255,
             verbose_name=_('value'),
-        )
+        ),
+        offering_value=models.CharField(
+            help_text=_(
+                'An alternative for value, used in what the user can offer'
+            ),
+            max_length=255,
+            verbose_name=_('offering value'),
+            default='',
+            blank=True
+        ),
     )
 
     class Meta:

@@ -1,14 +1,20 @@
+import logging
+import os
+
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+from extensions.mailer.mailer import send_template_mail
 
-from ..stages.models import QuestionAnswer, Stage
+from .email_pool import ExperimentEmailThread
+from ..stages.models import Question, QuestionAnswer, Stage
 from ..stages.serializers import StageSerializer
 from ..themes.models import Theme
 from ..themes.serializers import ThemeSerializer
 from ..uploads.models import Image
 from ..utils.serializers import ThumbnailImageField
+from ..users.models import UserProfile
 from .models import (
     Experiment,
     ExperimentChallenge,
@@ -18,6 +24,8 @@ from .models import (
     ExperimentPost,
     ExperimentPostComment
 )
+
+logger = logging.getLogger(__name__)
 
 
 class CreatorSerializer(serializers.ModelSerializer):
@@ -278,10 +286,7 @@ class ExperimentRetrieveSerializer(serializers.ModelSerializer):
     posts = ExperimentPostSerializer(
         many=True
     )
-    question_answers = ExperimentQuestionAnswerSerializer(
-        many=True,
-        source='questionanswer_set'
-    )
+    question_answers = serializers.SerializerMethodField()
     responsible_users = CreatorSerializer(
         many=True,
     )
@@ -310,6 +315,53 @@ class ExperimentRetrieveSerializer(serializers.ModelSerializer):
             'themes',
         )
 
+    def get_question_answers(self, instance):
+        stage = instance.stage
+        answers = instance.questionanswer_set.all()
+        if instance.experiment_challenges.count() > 0:
+            answers = answers.exclude(
+                question__ignore_in_experiment_challenge__in=instance.experiment_challenges.all()
+            )
+        serializer = ExperimentQuestionAnswerSerializer(
+            answers,
+            many=True
+        )
+        answer_data = serializer.data
+        user = self.context.get('user')
+        if user and user not in instance.responsible_users.all():
+            return answer_data
+
+        unanswered_questions = Question.objects.filter(
+            stage__stage_number__lte=stage.stage_number,
+            experiment_challenge_id__isnull=True,
+            is_public=True
+        ).exclude(questionanswer__in=answers).distinct()
+        if instance.experiment_challenges.count() > 0:
+            unanswered_questions = unanswered_questions.exclude(
+                ignore_in_experiment_challenge__in=instance.experiment_challenges.all()
+            )
+            unanswered_challenge_questions = Question.objects.filter(
+                experiment_challenge__in=instance.experiment_challenges.all()
+            ).exclude(questionanswer__in=answers)
+            for question in unanswered_challenge_questions:
+                answer_data.append({
+                    "id": f'{question.id}_unanswered',
+                    "question": question.question,
+                    "question_id": question.id,
+                    "stage_id": question.stage.pk,
+                    "value": ''
+                })
+        for question in unanswered_questions:
+            answer_data.append({
+                "id": f'{question.id}_unanswered',
+                "question": question.question,
+                "question_id": question.id,
+                "stage_id": question.stage.pk,
+                "value": ''
+            })
+        answer_data = sorted(answer_data, key=lambda x: x['question_id'])
+        return answer_data
+
     def to_representation(self, instance):
         # Make sure appropriate default values are returned for dot source
         # fields in the name of uniformity.
@@ -325,6 +377,9 @@ class ExperimentListSerializer(serializers.ModelSerializer):
         size='list_image',
         source='image.image',
     )
+    themes = ThemeSerializer(
+        many=True,
+    )
     stage = StageSerializer()
 
     class Meta:
@@ -338,6 +393,7 @@ class ExperimentListSerializer(serializers.ModelSerializer):
             'short_description',
             'slug',
             'stage',
+            'themes'
         )
 
     def to_representation(self, instance):
@@ -422,6 +478,47 @@ class ExperimentSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
+    def update(self, instance, validated_data):
+        """Send notification to the newly added responsible user, in case
+        the responsible_users field was changed.
+        """
+        if 'responsible_users' in validated_data:
+            resp_users = instance.responsible_users.all()
+            for user in validated_data['responsible_users']:
+                if user not in resp_users:
+                    mail_sent = send_template_mail(
+                        recipient=user.email,
+                        subject=_('You have been added to an experiment'),
+                        template='experiment_user_add_notification',
+                        variables={
+                            "user": self.context['request'].user.get_full_name(),
+                            "experiment_name": instance.name,
+                            "profile_url":
+                                f'{os.environ.get("BASE_FRONTEND_URL")}?login-to-profile=true'
+                        }
+                    )
+                    if not mail_sent:
+                        logger.error(
+                            'Could not send responsible user add notification email for user '
+                            'id %s.',
+                            user.id
+                        )
+
+        if not instance.is_published and validated_data.get('is_published') is True:
+            send_to = []
+            themes = instance.themes.all()
+            for user in UserProfile.objects.filter(send_experiment_notification=True).exclude(
+                user__in=instance.responsible_users.all()
+            ):
+                user_themes = user.interested_in_themes.all()
+                for theme in themes:
+                    if theme in user_themes:
+                        send_to.append(user.user.email)
+            send_to = list(set(send_to))
+            ExperimentEmailThread(send_to, instance.slug,
+                                  self.context['request'].user.get_full_name()).start()
+        return super().update(instance, validated_data)
+
     def to_representation(self, instance):
         return ExperimentRetrieveSerializer(
             instance,
@@ -443,21 +540,12 @@ class ExperimentSerializer(serializers.ModelSerializer):
         return value
 
     def validate_stage_number(self, value):
-        """Validate that stage_number can't be increased if any of the
-        experiment challenge memberships of the experiment is unapproved.
+        """Validate that stage_number must be 1 for newly created
+        experiments.
         """
         if not self.instance and value.stage_number > 1:
             raise serializers.ValidationError(_(
                 'Newly created experiment must be placed on the first stage.'
-            ))
-        elif (
-            self.instance and
-            value.stage_number > 1 and
-            self.instance.has_unapproved_challenge_memberships
-        ):
-            raise serializers.ValidationError(_(
-                'The experiment is not approved to all selected experiment '
-                'challenges and thus cannot be moved to the next stage.'
             ))
         return value
 

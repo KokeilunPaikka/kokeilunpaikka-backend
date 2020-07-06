@@ -23,6 +23,7 @@ class UserLookingForOptionSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'value',
+            'offering_value'
         )
 
 
@@ -99,23 +100,33 @@ class SingleUserBaseSerializer(UserBaseSerializer):
     description = serializers.CharField(
         source='profile.description',
         required=False,
+        allow_blank=True,
     )
     experiments = serializers.SerializerMethodField()
-    facebook_url = serializers.URLField(
+    facebook_url = serializers.CharField(
         source='profile.facebook_url',
         required=False,
+        allow_blank=True,
     )
-    instagram_url = serializers.URLField(
+    instagram_url = serializers.CharField(
         source='profile.instagram_url',
         required=False,
+        allow_blank=True,
     )
-    linkedin_url = serializers.URLField(
+    linkedin_url = serializers.CharField(
         source='profile.linkedin_url',
         required=False,
+        allow_blank=True,
     )
-    twitter_url = serializers.URLField(
+    twitter_url = serializers.CharField(
         source='profile.twitter_url',
         required=False,
+        allow_blank=True,
+    )
+    send_experiment_notification = serializers.BooleanField(
+        source='profile.send_experiment_notification',
+        required=False,
+        allow_null=True
     )
 
     class Meta(UserBaseSerializer.Meta):
@@ -126,6 +137,7 @@ class SingleUserBaseSerializer(UserBaseSerializer):
             'instagram_url',
             'linkedin_url',
             'twitter_url',
+            'send_experiment_notification'
         )
 
     def get_experiments(self, obj):
@@ -145,7 +157,7 @@ class SingleUserBaseSerializer(UserBaseSerializer):
             )
 
         return ExperimentListSerializer(
-            qs.order_by('-published_at', '-created_at'),
+            qs.order_by('-published_at', '-created_at').distinct(),
             many=True,
             context=self.context
         ).data
@@ -165,12 +177,21 @@ class UserRetrieveSerializer(SingleUserBaseSerializer):
         many=True,
         source='profile.looking_for',
     )
+    offering = UserLookingForOptionSerializer(
+        many=True,
+        source='profile.offering',
+    )
+    status = UserStatusOptionSerializer(
+        source='profile.status',
+    )
 
     class Meta(SingleUserBaseSerializer.Meta):
         fields = SingleUserBaseSerializer.Meta.fields + (
             'image_url',
             'interested_in_themes',
             'looking_for',
+            'offering',
+            'status'
         )
 
     def to_representation(self, instance):
@@ -214,15 +235,11 @@ class CurrentUserRetrieveSerializer(UserRetrieveSerializer):
     expose_email_address = serializers.BooleanField(
         source='profile.expose_email_address',
     )
-    status = UserStatusOptionSerializer(
-        source='profile.status',
-    )
 
     class Meta(UserRetrieveSerializer.Meta):
         fields = UserRetrieveSerializer.Meta.fields + (
             'email',
             'expose_email_address',
-            'status',
         )
         extra_kwargs = {
             'email': {'read_only': True}
@@ -264,6 +281,12 @@ class UserUpdateSerializer(SingleUserBaseSerializer):
         required=False,
         source='profile.looking_for',
     )
+    offering_ids = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=UserLookingForOption.objects.all(),
+        required=False,
+        source='profile.offering',
+    )
     status_id = serializers.PrimaryKeyRelatedField(
         queryset=UserStatusOption.objects.all(),
         required=False,
@@ -277,7 +300,8 @@ class UserUpdateSerializer(SingleUserBaseSerializer):
             'interested_in_theme_ids',
             'language',
             'looking_for_ids',
-            'status_id',
+            'offering_ids',
+            'status_id'
         )
 
     def update(self, instance, validated_data):
@@ -295,6 +319,7 @@ class UserUpdateSerializer(SingleUserBaseSerializer):
                 'instagram_url',
                 'linkedin_url',
                 'twitter_url',
+                'send_experiment_notification'
             ):
                 if field in profile_data:
                     setattr(profile, field, profile_data[field])
@@ -302,6 +327,8 @@ class UserUpdateSerializer(SingleUserBaseSerializer):
                 profile.interested_in_themes.set(profile_data['interested_in_themes'])
             if 'looking_for' in profile_data:
                 profile.looking_for.set(profile_data['looking_for'])
+            if 'offering' in profile_data:
+                profile.offering.set(profile_data['offering'])
             profile.save()
         return instance
 

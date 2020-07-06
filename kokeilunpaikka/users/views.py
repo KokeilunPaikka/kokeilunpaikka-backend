@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
@@ -9,6 +10,7 @@ from rest_framework.response import Response
 from ..docs.mixins import ApiResponseCodeDocumentationMixin
 from ..utils.pagination import ControllablePageNumberPagination
 from .models import UserLookingForOption, UserStatusOption
+from .filters import UserFilter
 from .serializers import (
     UserCreateSerializer,
     UserListSerializer,
@@ -149,9 +151,11 @@ class UserViewSet(
 
     """
     filter_backends = (
+        DjangoFilterBackend,
         filters.SearchFilter,
         filters.OrderingFilter,
     )
+    filterset_class = UserFilter
     ordering = ('-date_joined')
     pagination_class = ControllablePageNumberPagination
     search_fields = (

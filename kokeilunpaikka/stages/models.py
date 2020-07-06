@@ -65,6 +65,16 @@ class Question(TimeStampedModel, TranslatableModel):
         to='experiments.ExperimentChallenge',
         verbose_name=_('experiment challenge'),
     )
+    ignore_in_experiment_challenge = models.ManyToManyField(
+        blank=True,
+        help_text=_(
+            'Questions can be marked to be ignored in case of an experiment '
+            'challenge.'
+        ),
+        to='experiments.ExperimentChallenge',
+        verbose_name=_('ignore in experiment challenge'),
+        related_name="ignored_questions"
+    )
     is_public = models.BooleanField(
         default=True,
         help_text=_(

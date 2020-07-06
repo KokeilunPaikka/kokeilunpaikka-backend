@@ -1,11 +1,21 @@
+import logging
+import os
+
 from django.contrib.auth import get_user_model
 from django.db.models import Avg, Prefetch
+from django.http import HttpResponse
+from django.utils.translation import gettext_lazy as _
 
+from extensions.auth.models import User
+from extensions.mailer.mailer import send_template_mail
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, status, viewsets
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser
 
+from ..excel_export.experiments_export import ExperimentChallengeReport
 from ..docs.mixins import ApiResponseCodeDocumentationMixin
 from ..stages.models import QuestionAnswer
 from ..stages.serializers import QuestionAnswerSerializer
@@ -38,6 +48,8 @@ from .serializers import (
     ExperimentRetrieveSerializer,
     ExperimentSerializer
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ExperimentChallengeViewSet(
@@ -174,6 +186,21 @@ class ExperimentChallengeViewSet(
             return ExperimentChallengeListSerializer
         if self.action == 'retrieve':
             return ExperimentChallengeRetrieveSerializer
+
+    @action(
+        detail=True,
+        methods=['get'],
+        permission_classes=[IsAdminUser],
+        authentication_classes=[SessionAuthentication]
+    )
+    def export_to_excel(self, request, *args, **kwargs):
+        obj = self.get_object()
+        report = ExperimentChallengeReport(obj).create()
+        response = HttpResponse(report.read(),
+                                content_type='application/ms-excel')
+        response['Content-Disposition'] = \
+            'attachment; filename="experiment_challenge_report.xlsx"'
+        return response
 
 
 class ExperimentViewSet(
@@ -536,6 +563,29 @@ class ExperimentViewSet(
             return ExperimentListSerializer
         return self.serializer_class
 
+    def get_serializer_context(self):
+        context = super(ExperimentViewSet, self).get_serializer_context()
+        if self.action == 'retrieve':
+            context.update({"user": self.request.user})
+        return context
+
+    def send_publish_mail(self):
+        obj = self.get_object()
+        users = obj.responsible_users.all()
+        for user in users:
+            mail_sent = send_template_mail(
+                recipient=user.email,
+                subject=_('Your experiment has been published'),
+                template='publish_notification',
+                variables={}
+            )
+            if not mail_sent:
+                logger.error(
+                    'Could not send experiment publish notification email for user '
+                    'id %s.',
+                    user.id
+                )
+
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
@@ -572,6 +622,16 @@ class ExperimentViewSet(
             ),
             'visible_experiments_count': Experiment.objects.active().count(),
         })
+
+    def update(self, request, *args, **kwargs):
+        obj = self.get_object()
+        partial = kwargs.get('partial')
+        serializer_class = self.get_serializer_class()
+        serializer = serializer_class(data=request.data, partial=partial)
+        if serializer.is_valid() and request.data.get('is_published') is True \
+           and not obj.is_published:
+            self.send_publish_mail()
+        return super(ExperimentViewSet, self).update(request, *args, **kwargs)
 
 
 class ExperimentPostViewSet(
@@ -613,7 +673,7 @@ class ExperimentPostViewSet(
 
     ### Permissions
 
-    - Only allowed for responsible users of the experiment.
+    - Only allowed for authenticated users.
 
     ### Request
 
@@ -768,7 +828,7 @@ class ExperimentPostViewSet(
 
     """
     permission_classes = (
-        ReadOnly | IsResponsible,
+        ReadOnly | IsAuthenticatedAndCreateOnly | IsResponsible | IsOwner,
     )
     serializer_class = ExperimentPostSerializer
 
@@ -780,7 +840,31 @@ class ExperimentPostViewSet(
             experiment__slug=self.kwargs['experiment_slug'],
         )
 
+    def send_notification_mail(self, experiment_slug):
+        experiment = Experiment.objects.get(slug=experiment_slug)
+        if experiment.created_by and experiment.created_by.id != self.request.user.id:
+            mail_sent = send_template_mail(
+                recipient=experiment.created_by.email,
+                subject=_('New comment'),
+                template='comment_notification',
+                variables={
+                    "user": f'{self.request.user.first_name} {self.request.user.last_name}',
+                    "experiment_url":
+                        f'{os.environ.get("BASE_FRONTEND_URL")}/fi/kokeilu/'
+                        + experiment.slug
+                }
+            )
+            if not mail_sent:
+                logger.error(
+                    'Could not send comment notification email for user '
+                    'id %s.',
+                    experiment.created_by.id
+                )
+
     def perform_create(self, serializer):
+        if self.request.user.is_authenticated:
+            self.send_notification_mail(self.kwargs['experiment_slug'])
+
         serializer.save(
             created_by=self.request.user,
             experiment=Experiment.objects.get(slug=self.kwargs['experiment_slug']),
@@ -942,6 +1026,35 @@ class ExperimentPostCommentViewSet(
             experiment_post__experiment__slug=self.kwargs['experiment_slug'],
         )
 
+    def send_notification_mail(self, post_id):
+        post = ExperimentPost.objects.get(id=post_id)
+        experiment = post.experiment
+        user_ids = list(post.comments.all().values_list('created_by__id', flat=True))
+        if post.created_by:
+            user_ids.append(post.created_by.id)
+        if experiment.created_by:
+            user_ids.append(experiment.created_by.id)
+        users = User.objects.filter(id__in=user_ids).distinct()
+        for user in users:
+            if user.id != self.request.user.id:
+                mail_sent = send_template_mail(
+                    recipient=user.email,
+                    subject=_('New comment'),
+                    template='comment_notification',
+                    variables={
+                        "user": f'{self.request.user.first_name} {self.request.user.last_name}',
+                        "experiment_url":
+                            f'{os.environ.get("BASE_FRONTEND_URL")}/fi/kokeilu/'
+                            + post.experiment.slug
+                    }
+                )
+                if not mail_sent:
+                    logger.error(
+                        'Could not send comment notification email for user '
+                        'id %s.',
+                        user.id
+                    )
+
     def perform_create(self, serializer):
         kwargs = {
             'experiment_post_id': self.kwargs['post_id'],
@@ -949,5 +1062,6 @@ class ExperimentPostCommentViewSet(
 
         if self.request.user.is_authenticated:
             kwargs['created_by'] = self.request.user
+            self.send_notification_mail(self.kwargs['post_id'])
 
         serializer.save(**kwargs)

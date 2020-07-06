@@ -44,6 +44,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 class UserLookingForOptionAdmin(TranslatableAdmin):
     fields = (
         'value',
+        'offering_value',
         'created_at',
         'updated_at',
     )

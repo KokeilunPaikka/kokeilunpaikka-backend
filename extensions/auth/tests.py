@@ -92,6 +92,8 @@ class AuthenticationAPITestCase(APITestCase):
             'last_name': 'Doe',
             'linkedin_url': '',
             'looking_for': [],
+            'offering': None,
+            'send_experiment_notification': None,
             'status': None,
             'twitter_url': '',
         }
@@ -146,7 +148,10 @@ class AuthenticationAPITestCase(APITestCase):
             'looking_for': [{
                 'id': looking_for.id,
                 'value': 'Help',
+                'offering_value': ''
             }],
+            'offering': [],
+            'send_experiment_notification': False,
             'status': {
                 'id': user_status.id,
                 'value': 'Student',
@@ -180,6 +185,8 @@ class AuthenticationAPITestCase(APITestCase):
             'last_name': 'Doe',
             'linkedin_url': '',
             'looking_for': [],
+            'offering': [],
+            'send_experiment_notification': False,
             'status': None,
             'twitter_url': '',
         }
@@ -191,7 +198,7 @@ class AuthenticationAPITestCase(APITestCase):
 
     def test_current_user_cant_set_image_not_uploaded_by_the_user(self):
         image = Image.objects.create(
-            image=SimpleUploadedFile(f'test.jpeg', b'', content_type='image/jpeg'),
+            image=SimpleUploadedFile('test.jpeg', b'', content_type='image/jpeg'),
         )
         request_body = {
             'image_id': image.id

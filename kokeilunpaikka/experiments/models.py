@@ -5,8 +5,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from django_extensions.db.fields import AutoSlugField
-from parler.models import TranslatableModel, TranslatedFields
-
+from parler.models import TranslatableModel, TranslatedFields, TranslatedField, \
+    TranslatedFieldsModel
 from ..stages.models import Stage
 from ..utils.models import SanitizedRichTextField, TimeStampedModel
 from .querysets import ExperimentChallengeQuerySet, ExperimentQuerySet
@@ -24,13 +24,6 @@ class ExperimentChallenge(TimeStampedModel, TranslatableModel):
     is_visible = models.BooleanField(
         default=True,
         verbose_name=_('is visible'),
-    )
-    lead_text = models.TextField(
-        blank=True,
-        help_text=_(
-            'Emphasized opening content of the challenge.'
-        ),
-        verbose_name=_('lead text'),
     )
     starts_at = models.DateTimeField(
         null=True,
@@ -60,6 +53,13 @@ class ExperimentChallenge(TimeStampedModel, TranslatableModel):
             unique=True,
             verbose_name=_('slug'),
         ),
+        lead_text=models.TextField(
+            blank=True,
+            help_text=_(
+                'Emphasized opening content of the challenge.'
+            ),
+            verbose_name=_('lead text'),
+        )
     )
 
     objects = ExperimentChallengeQuerySet.as_manager()
@@ -111,13 +111,11 @@ class ExperimentChallengeMembership(TimeStampedModel):
         verbose_name_plural = _('experiment challenge memberships')
 
 
-class ExperimentChallengeTimelineEntry(TimeStampedModel):
+class ExperimentChallengeTimelineEntry(TimeStampedModel, TranslatableModel):
     date = models.DateField(
         verbose_name=_('date'),
     )
-    content = models.TextField(
-        verbose_name=_('content'),
-    )
+    content = TranslatedField()
     experiment_challenge = models.ForeignKey(
         on_delete=models.CASCADE,
         to='experiments.ExperimentChallenge',
@@ -131,6 +129,19 @@ class ExperimentChallengeTimelineEntry(TimeStampedModel):
         )
         verbose_name = _('experiment challenge timeline entry')
         verbose_name_plural = _('experiment challenge timeline entries')
+
+
+class ExperimentChallengeTimelineEntryTranslation(TranslatedFieldsModel):
+    master = models.ForeignKey(
+        ExperimentChallengeTimelineEntry,
+        related_name='translations',
+        null=True,
+        on_delete=models.CASCADE
+    )
+    content = models.TextField(verbose_name=_('content'))
+
+    class Meta:
+        unique_together = ('language_code', 'master')
 
 
 class Experiment(TimeStampedModel):
@@ -312,6 +323,9 @@ class ExperimentPost(TimeStampedModel):
         experiment of this post.
         """
         return user in self.experiment.responsible_users.all()
+
+    def is_owner(self, user):
+        return user == self.created_by
 
 
 class ExperimentPostComment(TimeStampedModel):
