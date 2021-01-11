@@ -248,6 +248,7 @@ class Experiment(TimeStampedModel):
         to='themes.Theme',
         verbose_name=_('themes'),
     )
+    views = models.IntegerField(verbose_name=_('views'), default=0)
 
     objects = ExperimentQuerySet.as_manager()
 

@@ -310,7 +310,8 @@ class ExperimentAPITestCase(APITestCase):
                 'id': self.theme.id,
                 'is_curated': False,
                 'name': 'Theme'
-            }]
+            }],
+            'views': 0
         }
         self.assertEqual(response.json(), expected_response_body)
         self.assertEqual(
@@ -486,7 +487,8 @@ class ExperimentAPITestCase(APITestCase):
                 'id': self.theme.id,
                 'is_curated': False,
                 'name': 'Theme'
-            }]
+            }],
+            'views': 1
         }
         url = reverse('experiment-detail', kwargs={'slug': self.experiment.slug})
         response = self.client.get(url)
@@ -538,6 +540,7 @@ class ExperimentAPITestCase(APITestCase):
             'id': question_answer.id,
             'value': 'My answer',
             'question': 'Question',
+            'description': question.description,
             'question_id': question.id,
             'stage_id': self.first_stage.stage_number,
         }])
@@ -659,7 +662,8 @@ class ExperimentAPITestCase(APITestCase):
                 'name': 'First stage',
                 'stage_number': self.first_stage.stage_number
             },
-            'themes': []
+            'themes': [],
+            'views': 0
         }
         url = reverse('experiment-detail', kwargs={'slug': self.experiment.slug})
         self.client.force_authenticate(user=self.owner)
@@ -848,7 +852,8 @@ class ExperimentAPITestCase(APITestCase):
                 'id': self.theme.id,
                 'is_curated': False,
                 'name': 'Theme'
-            }]
+            }],
+            'views': 0
         }
         url = reverse('experiment-detail', kwargs={'slug': self.experiment.slug})
         self.client.force_authenticate(user=self.owner)

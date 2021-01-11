@@ -259,6 +259,9 @@ class ExperimentQuestionAnswerSerializer(serializers.ModelSerializer):
     question = serializers.CharField(
         source='question.question'
     )
+    description = serializers.CharField(
+        source='question.description'
+    )
 
     class Meta:
         model = QuestionAnswer
@@ -268,6 +271,7 @@ class ExperimentQuestionAnswerSerializer(serializers.ModelSerializer):
             'question',
             'question_id',
             'stage_id',
+            'description'
         )
 
 
@@ -313,6 +317,7 @@ class ExperimentRetrieveSerializer(serializers.ModelSerializer):
             'slug',
             'stage',
             'themes',
+            'views'
         )
 
     def get_question_answers(self, instance):
@@ -322,6 +327,7 @@ class ExperimentRetrieveSerializer(serializers.ModelSerializer):
             answers = answers.exclude(
                 question__ignore_in_experiment_challenge__in=instance.experiment_challenges.all()
             )
+        answers = answers.distinct()
         serializer = ExperimentQuestionAnswerSerializer(
             answers,
             many=True
@@ -349,6 +355,7 @@ class ExperimentRetrieveSerializer(serializers.ModelSerializer):
                     "question": question.question,
                     "question_id": question.id,
                     "stage_id": question.stage.pk,
+                    "description": question.description,
                     "value": ''
                 })
         for question in unanswered_questions:
@@ -357,6 +364,7 @@ class ExperimentRetrieveSerializer(serializers.ModelSerializer):
                 "question": question.question,
                 "question_id": question.id,
                 "stage_id": question.stage.pk,
+                "description": question.description,
                 "value": ''
             })
         answer_data = sorted(answer_data, key=lambda x: x['question_id'])
@@ -457,7 +465,7 @@ class ExperimentSerializer(serializers.ModelSerializer):
             'slug',
             'stage_number',
             'success_rating',
-            'theme_ids',
+            'theme_ids'
         )
         read_only_fields = (
             'slug',

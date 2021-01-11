@@ -2,6 +2,7 @@ import logging
 
 from .export_template import ExperimentWorkbookTemplate, ExperimentWorksheetTemplate
 from kokeilunpaikka.stages.models import Question
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +25,12 @@ class ExperimentChallengeReport(ExperimentWorkbookTemplate):
             "Experiment description"
         ]
         questions = Question.objects.filter(
-            questionanswer__experiment__in=self.experiment_challenge.experiment_set.all()
-        ).distinct()
+            Q(
+                questionanswer__experiment__in=self.experiment_challenge.experiment_set.all()
+            ) | Q(
+                experiment_challenge=self.experiment_challenge
+            )
+        ).order_by('id').distinct()
         for q in questions:
             headers.append(q.translations.first().question)
         headers += [
@@ -69,7 +74,8 @@ class ExperimentChallengeReport(ExperimentWorkbookTemplate):
                 else:
                     fields += ('', self.styles[self.CELL]),
             fields += [
-                (experiment.created_by.get_full_name(), self.styles[self.CELL]),
+                (experiment.created_by.get_full_name() if experiment.created_by else '',
+                    self.styles[self.CELL]),
                 (experiment.organizer, self.styles[self.CELL]),
                 (', '.join([
                     res_user.get_full_name() for res_user in experiment.responsible_users.all()

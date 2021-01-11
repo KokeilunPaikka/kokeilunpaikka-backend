@@ -2,7 +2,8 @@ import logging
 import os
 
 from django.contrib.auth import get_user_model
-from django.db.models import Avg, Prefetch
+from django.contrib.auth.models import AnonymousUser
+from django.db.models import Avg, Prefetch, Q
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -527,6 +528,11 @@ class ExperimentViewSet(
     serializer_class = ExperimentSerializer
 
     def get_queryset(self):
+        query = Q(question__is_public=True) | \
+                (Q(question__is_public=False) &
+                 Q(experiment__responsible_users=self.request.user))
+        if isinstance(self.request.user, AnonymousUser):
+            query = Q(question__is_public=True)
         return (
             Experiment.objects.for_user(self.request.user)
             .select_related('image', 'stage')
@@ -534,7 +540,7 @@ class ExperimentViewSet(
                 Prefetch(
                     'questionanswer_set',
                     queryset=QuestionAnswer.objects.filter(
-                        question__is_public=True
+                        query
                     ).order_by(
                         'question_id'
                     )
@@ -622,6 +628,13 @@ class ExperimentViewSet(
             ),
             'visible_experiments_count': Experiment.objects.active().count(),
         })
+
+    def retrieve(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj and obj.is_published:
+            obj.views += 1
+            obj.save()
+        return super().retrieve(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         obj = self.get_object()
