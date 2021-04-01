@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
@@ -6,7 +7,10 @@ from django.views.decorators.debug import sensitive_post_parameters
 from rest_framework import filters, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAdminUser
 
+from ..excel_export.experiments_export import UserDetailsReport
 from ..docs.mixins import ApiResponseCodeDocumentationMixin
 from ..utils.pagination import ControllablePageNumberPagination
 from .models import UserLookingForOption, UserStatusOption
@@ -210,3 +214,14 @@ class UserViewSet(
             many=True
         )
         return Response(serializer.data)
+
+    @action(detail=False, permission_classes=(IsAdminUser,),
+            authentication_classes=(SessionAuthentication,))
+    def export_to_excel(self, request, *args, **kwargs):
+        users = get_user_model().objects.all()
+        report = UserDetailsReport(users).create()
+        response = HttpResponse(report.read(),
+                                content_type='application/ms-excel')
+        response['Content-Disposition'] = \
+            'attachment; filename="user_details_report.xlsx"'
+        return response

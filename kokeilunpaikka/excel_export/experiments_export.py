@@ -115,3 +115,42 @@ class ExperimentChallengeReport(ExperimentWorkbookTemplate):
 
         worksheet_dict['worksheet'].autofilter(0, 0, 0, len(headers))
         worksheet_dict['worksheet'].freeze_panes(1, 0)
+
+
+class UserDetailsReport(ExperimentWorkbookTemplate):
+    def __init__(self, users, constant_memory=True):
+        self.users = users
+        super(UserDetailsReport, self).__init__(users)
+
+    def create(self):
+        super().create()
+        self.add_details_tab()
+        return self.xlsx.generate()
+
+    def add_details_tab(self):
+        headers = [
+            "User name",
+            "User email"
+        ]
+        worksheet_dict = self.xlsx.add_worksheet(
+            "User details", ExperimentWorksheetTemplate)
+        self.xlsx.set_worksheet_settings(worksheet_dict, len(headers))
+
+        self.xlsx.add_batch_horizontally(worksheet_dict,
+                                         start_position=(0, 0),
+                                         cells=headers,
+                                         cell_format=self.styles[self.TITLE])
+
+        x = 0
+        for user in self.users:
+            x += 1
+            fields = [
+                (user.get_full_name(), self.styles[self.CELL]),
+                (user.email, self.styles[self.CELL]),
+            ]
+            for y, field in enumerate(fields):
+                self.xlsx.add_cell(worksheet_dict, content=field[0], position=(x, y),
+                                   cell_format=field[1])
+
+        worksheet_dict['worksheet'].autofilter(0, 0, 0, len(headers))
+        worksheet_dict['worksheet'].freeze_panes(1, 0)

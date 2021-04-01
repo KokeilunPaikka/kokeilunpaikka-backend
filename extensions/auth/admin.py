@@ -31,6 +31,7 @@ class UserProfileInlineAdmin(admin.StackedInline):
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    change_list_template = 'admin/auth/user/change_list.html'
     inlines = (
         UserProfileInlineAdmin,
     )
