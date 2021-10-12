@@ -13,7 +13,7 @@ django-ckeditor==5.7.1
 django-cors-headers==3.1.0
 easy-thumbnails==2.6
 django-storages[google]==1.7.2
-bleach==3.1.0
+bleach==3.3.0
 django-extensions==2.2.1
 requests==2.22.0
 XlsxWriter==1.2.0
