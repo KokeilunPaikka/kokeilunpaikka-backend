@@ -349,11 +349,17 @@ class UserDetailsSerializer(UserUpdateSerializer):
 
 
 class UserCreateSerializer(UserBaseSerializer):
+    send_experiment_notification = serializers.BooleanField(
+        source='profile.send_experiment_notification',
+        required=False,
+        allow_null=True
+    )
 
     class Meta(UserBaseSerializer.Meta):
         fields = UserBaseSerializer.Meta.fields + (
             'email',
             'password',
+            'send_experiment_notification'
         )
         extra_kwargs = {
             'email': {'required': True},
@@ -362,13 +368,14 @@ class UserCreateSerializer(UserBaseSerializer):
         }
 
     def create(self, validated_data):
+        profile_data = validated_data.pop('profile', {})
         with transaction.atomic():
             instance = get_user_model().objects.create_user(
                 username=validated_data['email'],
                 **validated_data
             )
 
-            # Empty user profile is automatically created to signify the user
+            # User profile is automatically created to signify the user
             # was created through the registration and process and should be
             # visible in the user listings.
             #
@@ -376,6 +383,7 @@ class UserCreateSerializer(UserBaseSerializer):
             # superadmin and thus exposing those users to public.
             UserProfile.objects.create(
                 user=instance,
+                **profile_data
             )
 
         instance.send_registration_notification()

@@ -78,6 +78,7 @@ class UserAPITestCase(APITestCase):
             'last_name': 'Doe',
             'email': 'john.doe@example.com',
             'password': 'password',
+            'send_experiment_notification': True
         }
         expected_response_body = {
             'id': None,
@@ -93,7 +94,7 @@ class UserAPITestCase(APITestCase):
             'linkedin_url': '',
             'looking_for': [],
             'offering': [],
-            'send_experiment_notification': False,
+            'send_experiment_notification': True,
             'status': None,
             'twitter_url': '',
         }

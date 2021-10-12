@@ -25,7 +25,8 @@ class ExperimentEmailThread(Thread):
                 template='new_experiment_notification',
                 variables={
                     "user": self.user_name,
-                    "profile_url": f'{os.environ.get("BASE_FRONTEND_URL")}?login-to-profile=true',
+                    "profile_url":
+                    f'{os.environ.get("BASE_FRONTEND_URL")}?login-to-profile-edit=true',
                     "experiment_url":
                         f'{os.environ.get("BASE_FRONTEND_URL")}/kokeilu/'
                         + self.experiment_slug
