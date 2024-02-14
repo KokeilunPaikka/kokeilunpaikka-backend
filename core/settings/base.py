@@ -27,6 +27,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+# Declare explicitly to quiet Django >3.2 warnings
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     # This must be placed before rest_framework
-    'kokeilunpaikka.docs',
+    'kokeilunpaikka.docs.apps.ConfigAppConfig',
 
     # Dependencies
     'corsheaders',
